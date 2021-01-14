@@ -9,5 +9,4 @@ public class MatjipfindApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MatjipfindApplication.class, args);
 	}
-
 }

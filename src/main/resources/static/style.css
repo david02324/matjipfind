@@ -29,7 +29,7 @@ body{
 .middle-right{
     height: 60vh;
     width: 10vw;
-    background-color: blue;
+    background-color: grey;
     float: left;
 }
 .footer{
