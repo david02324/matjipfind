@@ -1,26 +1,47 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link th:href="@{/style.css}" rel="stylesheet" />
+    <link th:href="@{/style.css?ver=1}" rel="stylesheet" />
     <Title>테스트 타이틀</Title>
 </head>
 <body>
 <div class="wrap">
     <!-- HEADER -->
     <div class="header">
-        <span>이곳은 상단 헤더 영역 입니다. 색깔은 주황</span>
+        맞집찾아줘... alpha
     </div>
     <!-- MIDDLE -->
     <div class="middle">
         <div class="middle-left" id="map"></div>
         <div class="middle-right">
+            <div>
             <!-- 위치 정보 가져오는 버튼 -->
             <button type="button" class="btn btn-lg btn-primary"
-            onclick="getCurrentPosBtn()">내 위치 가져오기</button>
+                    onclick="getCurrentPosBtn()">내 위치 가져오기</button>
+            <button type="button" class="btn btn-lg btn-primary"
+                    onclick="getCurrentPosByPickBtn()">내 위치 직접선택</button>
+            </div>
             <input type="text" class="form-control" id="keyword" onkeypress="if(event.keyCode==13){keywordSearch();}"
                    placeholder="키워드(ex 국밥,불고기)">
             <span>최근키워드</span>
             <button type="button" class="btn btn-lg btn-primary" onclick="keywordSearch()">검색</button>
+            <div class="radio">
+                <div>
+                    최대 검색 거리 선택
+                </div>
+                <label>
+                    <input type="radio" name="distance" value="500" checked>
+                    500M
+                </label>
+                <label>
+                    <input type="radio" name="distance" value="1000">
+                    1000M
+                </label>
+                <label>
+                    <input type="radio" name="distance" value="2000">
+                    2000M
+                </label>
+            </div>
             <div class="result-list">
                 <ul id="placesList"></ul>
                 <div id="pagination"></div>
@@ -33,7 +54,7 @@
     </div>
 </div>
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a7785e99dbe88494a267131d874684c8&libraries=services"></script>
-<script type="text/javascript" th:src="@{map.js}"></script>
+<script type="text/javascript" th:src="@{map.js?ver=1.1}"></script>
 <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>

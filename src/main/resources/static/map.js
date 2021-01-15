@@ -22,16 +22,33 @@ function locationLoadSuccess(pos){
 
     // 마커 생성
     var marker = new kakao.maps.Marker({
-        position: currentPos
+        position: currentPos,
+        draggable: true
     });
+
+    var infowindow = new kakao.maps.InfoWindow({
+        content: '<div style="width:150px;text-align:center;padding:6px 0;">' +
+            '위치가 부정확하다면 드래그를 통해 정확한 위치로 옮겨주세요!</div>'
+    });
+    infowindow.open(map, marker);
 
     // 기존에 마커가 있다면 제거
     marker.setMap(null);
     marker.setMap(map);
+
+    // 마우스를 마커에 올릴 시 인포윈도우 삭제
+    kakao.maps.event.addListener(marker, 'mouseover', function() {
+        infowindow.close();
+    });
+
+    // 마커의 드래그가 끝나면 현재 위치 갱신
+    kakao.maps.event.addListener(marker, 'dragend', function() {
+        currentPos = marker.getPosition();
+    });
 };
 
 function locationLoadError(){
-    alert('위치 정보를 가져오는데 실패했습니다.');
+    alert('위치 정보를 가져오는데 실패했습니다 :( 직접선택 기능을 이용해주세요.');
 };
 
 // 위치 가져오기 버튼 클릭시
@@ -39,9 +56,59 @@ function getCurrentPosBtn(){
     navigator.geolocation.getCurrentPosition(locationLoadSuccess,locationLoadError);
 };
 
+function getCurrentPosByPickBtn(){
+    var userInput = prompt('대략적인 위치를 입력해주세요!(서울시 강남구 삼성동)');
+
+    // 주소 - 좌표 변환 객체 생성
+    var geocoder = new kakao.maps.services.Geocoder();
+
+    // 주소로 좌표를 검색합니다
+    geocoder.addressSearch(userInput, function(result, status) {
+
+        // 정상적으로 검색이 완료됐으면
+        if (status === kakao.maps.services.Status.OK) {
+
+            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+            // 결과값으로 받은 위치를 마커로 표시합니다
+            var marker = new kakao.maps.Marker({
+                map: map,
+                position: coords,
+                draggable: true
+            });
+
+            // 현재 위치 갱신
+            currentPos = coords;
+
+            // 인포윈도우로 장소에 대한 설명을 표시합니다
+            var infowindow = new kakao.maps.InfoWindow({
+                content: '<div style="width:150px;text-align:center;padding:6px 0;">' +
+                    '드래그를 통해 정확한 위치로 옮겨주세요!</div>'
+            });
+            infowindow.open(map, marker);
+            
+            
+            // 마우스를 마커에 올릴 시 인포윈도우 삭제
+            kakao.maps.event.addListener(marker, 'mouseover', function() {
+                infowindow.close();
+            });
+
+            // 마커의 드래그가 끝나면 현재 위치 갱신
+            kakao.maps.event.addListener(marker, 'dragend', function() {
+                currentPos = marker.getPosition();
+            });
+
+
+            // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+            map.setCenter(coords);
+        }
+    });
+}
+
 // 검색 버튼 클릭시
 function keywordSearch(){
     var keyword = $('#keyword').val();
+    var distance = $("input[name='distance']:checked").val();
     var markers = [];
 
     // 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성합니다
@@ -53,8 +120,8 @@ function keywordSearch(){
     // 검색 옵션 객체
     var searchOption = {
         location: currentPos,
-        radius: 1000,
-        size: 5
+        radius: distance,
+        size: 9
     };
 
     // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
@@ -149,7 +216,8 @@ function keywordSearch(){
         var el = document.createElement('li'),
             itemStr = '<span class="markerbg marker_' + (index+1) + '"></span>' +
                 '<div class="info">' +
-                '   <h5>' + places.place_name + '</h5>';
+                '  <a href="'+naverSearch(places.place_name)+'" target="_blank" title="클릭시 네이버 검색">' +
+                '<h5>' + places.place_name + '</h5></a>';
 
         itemStr += '  <span class="tel">' + places.phone  + '</span>' +
             '</div>';
@@ -158,6 +226,16 @@ function keywordSearch(){
         el.className = 'item';
 
         return el;
+    }
+
+    function naverSearch(placeName){
+        // 검색어를 띄어쓰기 기준으로 분할
+        var nameArr = placeName.split(' ');
+        // 띄어쓰기 사이에 +넣어서 join
+        var joinedArr = nameArr.join('+');
+
+        // 네이버 검색
+        return 'https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=' + joinedArr;
     }
 
     // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다

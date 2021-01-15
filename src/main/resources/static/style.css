@@ -12,6 +12,8 @@ body{
 .header{
     height: 15vh;
     background: orange;
+    text-align: left;
+    font-size: 10vh;
 }
 .middle{
     display: flex;
