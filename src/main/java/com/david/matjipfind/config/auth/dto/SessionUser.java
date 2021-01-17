@@ -14,14 +14,7 @@ public class SessionUser implements Serializable {
     public SessionUser(User user){
         this.name = user.getName();
         this.email = user.getEmail();
-        String last_position = user.getLast_position();
-        String last_keyword = user.getLast_keyword();
-
-        if(last_position!=null){
-            this.last_position = last_position;
-        }
-        if(last_keyword!=null){
-            this.last_keyword = last_keyword;
-        }
+        this.last_position = user.getLast_position();
+        this.last_keyword = user.getLast_keyword();
     }
 }

@@ -24,15 +24,17 @@ body{
 .middle-left{
     height: 60vh;
     width: 40vw;
-    background-color: aqua;
     margin-right: 1vw;
+}
+.login-area{
     float: left;
+
+    background-color: grey;
 }
 .middle-right{
     height: 60vh;
     width: 10vw;
     background-color: grey;
-    float: left;
 }
 .footer{
     height: 15vh;

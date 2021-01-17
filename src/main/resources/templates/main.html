@@ -10,6 +10,15 @@
     <div class="header">
         맞집찾아줘... alpha
     </div>
+    <div class="login-area">
+                <span th:if="${userName != null}">
+                    안녕하세요! <span th:text="${userName}"></span> 님! <br>
+                    <a href="/logout" class="btn btn-info active" role="button">로그아웃</a>
+                </span>
+        <span th:if="${userName == null}">
+                    <a href="/oauth2/authorization/google" class="btn btn-success active" role="button">구글로 로그인!</a>
+                </span>
+    </div>
     <!-- MIDDLE -->
     <div class="middle">
         <div class="middle-left" id="map"></div>

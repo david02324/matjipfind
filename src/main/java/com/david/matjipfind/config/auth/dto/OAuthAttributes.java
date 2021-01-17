@@ -18,11 +18,14 @@ public class OAuthAttributes {
     @Builder
     public OAuthAttributes(Map<String,Object> attributes,
                            String nameAttributeKey,String name,
-                           String email){
+                           String email,String last_position,
+                           String last_keyword){
         this.attributes = attributes;
         this.nameAttributeKey = nameAttributeKey;
         this.name = name;
         this.email = email;
+        this.last_position = last_position;
+        this.last_keyword = last_keyword;
     }
 
     public static OAuthAttributes of(String registrationId,
@@ -36,6 +39,8 @@ public class OAuthAttributes {
         return OAuthAttributes.builder()
                 .name((String) attributes.get("name"))
                 .email((String) attributes.get("email"))
+                .last_keyword((String) attributes.get("last_keyword"))
+                .last_position((String) attributes.get("last_position"))
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
