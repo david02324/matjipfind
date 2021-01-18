@@ -138,6 +138,9 @@ function keywordSearch(){
             // 페이지 번호를 표출합니다
             displayPagination(pagination);
 
+            // 로그인이 되어 있는 경우 키워드를 저장합니다
+            saveKeyword(keyword);
+
         } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
 
             alert('검색 결과가 존재하지 않습니다.');
@@ -145,7 +148,7 @@ function keywordSearch(){
 
         } else if (status === kakao.maps.services.Status.ERROR) {
 
-            alert('검색 결과 중 오류가 발생했습니다.');
+            alert('검색 중 오류가 발생했습니다.');
             return;
 
         }
@@ -313,4 +316,18 @@ function keywordSearch(){
             el.removeChild(el.lastChild);
         }
     }
+}
+
+function saveKeyword(keyword){
+    // 로그인 정보가 없을 경우 종료
+    if($('#userEmail').val() == null)
+        return;
+
+    $.ajax({
+        url:"keywordData.do",
+        type:'POST',
+        data: { "keyword": keyword },
+    }).done(function () {
+        alert('완료');
+    });
 }
