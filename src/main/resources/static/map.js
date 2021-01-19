@@ -108,6 +108,7 @@ function getCurrentPosByPickBtn(){
 // 검색 버튼 클릭시
 function keywordSearch(){
     var keyword = $('#keyword').val();
+    var id = $('#userId').val();
     var distance = $("input[name='distance']:checked").val();
     var markers = [];
 
@@ -139,7 +140,7 @@ function keywordSearch(){
             displayPagination(pagination);
 
             // 로그인이 되어 있는 경우 키워드를 저장합니다
-            saveKeyword(keyword);
+            saveKeyword(id,keyword);
 
         } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
 
@@ -318,16 +319,20 @@ function keywordSearch(){
     }
 }
 
-function saveKeyword(keyword){
+function saveKeyword(id,keyword){
     // 로그인 정보가 없을 경우 종료
-    if($('#userEmail').val() == null)
+    if(id == undefined)
         return;
 
     $.ajax({
-        url:"keywordData.do",
+        url:"keywordData",
         type:'POST',
-        data: { "keyword": keyword },
+        data: {
+            "id" : id,
+            "keyword": keyword },
     }).done(function () {
-        alert('완료');
+        $('.last-keyword').html(keyword).click(function (){
+            $('#keyword').val(keyword).focus();
+        });
     });
 }

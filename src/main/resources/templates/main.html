@@ -3,6 +3,7 @@
 <head>
     <link th:href="@{/style.css?ver=1}" rel="stylesheet" />
     <Title>테스트 타이틀</Title>
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 </head>
 <body>
 <div class="wrap">
@@ -13,7 +14,16 @@
     <div class="login-area">
         <span th:if="${userName != null}">
             안녕하세요! <span th:text="${userName}"></span> 님! <br>
-            <input type="hidden" id="userEmail" th:value="${userEmail}"/>
+            <input type="hidden" id="userId" th:value="${id}"/>
+            <input th:if="${last_keyword != null}" type="hidden" id="last-keyword"  th:value="${last_keyword}"/>
+            <script th:inline="javascript">
+                keyword = $('#last-keyword').val();
+                $(window).load(function(){
+                    $('.last-keyword').html(keyword).click(function (){
+                        $('#keyword').val(keyword).focus();
+                    });
+                });
+            </script>
             <a href="/logout" class="btn btn-info active" role="button">로그아웃</a>
         </span>
         <span th:if="${userName == null}">
@@ -33,7 +43,7 @@
             </div>
             <input type="text" class="form-control" id="keyword" onkeypress="if(event.keyCode==13){keywordSearch();}"
                    placeholder="키워드(ex 국밥,불고기)">
-            <span>최근키워드</span>
+            <span class="last-keyword">최근키워드</span>
             <button type="button" class="btn btn-lg btn-primary" onclick="keywordSearch()">검색</button>
             <div class="radio">
                 <div>
@@ -65,7 +75,6 @@
 </div>
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a7785e99dbe88494a267131d874684c8&libraries=services"></script>
 <script type="text/javascript" th:src="@{map.js?ver=1.1}"></script>
-<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 </body>

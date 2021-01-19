@@ -22,7 +22,15 @@ public class User {
     private String email;
 
     private String last_position;
+
+    public void setLast_position(String last_position) {
+        this.last_position = last_position;
+    }
+
     private String last_keyword;
+    public void setLast_keyword(String last_keyword) {
+        this.last_keyword = last_keyword;
+    }
 
     @Builder
     public User(String name,String email){

@@ -10,6 +10,7 @@ import java.util.Map;
 public class OAuthAttributes {
     private Map<String,Object> attributes;
     private String nameAttributeKey;
+    private Long id;
     private String name;
     private String email;
     private String last_position;
@@ -17,11 +18,13 @@ public class OAuthAttributes {
 
     @Builder
     public OAuthAttributes(Map<String,Object> attributes,
-                           String nameAttributeKey,String name,
+                           String nameAttributeKey,Long id,
+                           String name,
                            String email,String last_position,
                            String last_keyword){
         this.attributes = attributes;
         this.nameAttributeKey = nameAttributeKey;
+        this.id = id;
         this.name = name;
         this.email = email;
         this.last_position = last_position;
