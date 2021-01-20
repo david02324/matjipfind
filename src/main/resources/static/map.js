@@ -8,43 +8,13 @@ var mapContainer = document.getElementById('map'), // 지도를 표시할 div
 // 지도를 생성한다
 var map = new kakao.maps.Map(mapContainer, mapOption);
 
+// 현재 위치
 var currentPos;
 
+
 function locationLoadSuccess(pos){
-    // 현재 위치 받아오기
-    currentPos = new kakao.maps.LatLng(pos.coords.latitude,pos.coords.longitude);
-
-    // 지도 이동(기존 위치와 가깝다면 부드럽게 이동)
-    map.panTo(currentPos);
-
-    // 확대 수준 변경
-    map.setLevel(3);
-
-    // 마커 생성
-    var marker = new kakao.maps.Marker({
-        position: currentPos,
-        draggable: true
-    });
-
-    var infowindow = new kakao.maps.InfoWindow({
-        content: '<div style="width:150px;text-align:center;padding:6px 0;">' +
-            '위치가 부정확하다면 드래그를 통해 정확한 위치로 옮겨주세요!</div>'
-    });
-    infowindow.open(map, marker);
-
-    // 기존에 마커가 있다면 제거
-    marker.setMap(null);
-    marker.setMap(map);
-
-    // 마우스를 마커에 올릴 시 인포윈도우 삭제
-    kakao.maps.event.addListener(marker, 'mouseover', function() {
-        infowindow.close();
-    });
-
-    // 마커의 드래그가 끝나면 현재 위치 갱신
-    kakao.maps.event.addListener(marker, 'dragend', function() {
-        currentPos = marker.getPosition();
-    });
+    // 지도 이동
+    moveMap(pos.coords.latitude,pos.coords.longitude);
 };
 
 function locationLoadError(){
@@ -67,40 +37,7 @@ function getCurrentPosByPickBtn(){
 
         // 정상적으로 검색이 완료됐으면
         if (status === kakao.maps.services.Status.OK) {
-
-            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-            // 결과값으로 받은 위치를 마커로 표시합니다
-            var marker = new kakao.maps.Marker({
-                map: map,
-                position: coords,
-                draggable: true
-            });
-
-            // 현재 위치 갱신
-            currentPos = coords;
-
-            // 인포윈도우로 장소에 대한 설명을 표시합니다
-            var infowindow = new kakao.maps.InfoWindow({
-                content: '<div style="width:150px;text-align:center;padding:6px 0;">' +
-                    '드래그를 통해 정확한 위치로 옮겨주세요!</div>'
-            });
-            infowindow.open(map, marker);
-            
-            
-            // 마우스를 마커에 올릴 시 인포윈도우 삭제
-            kakao.maps.event.addListener(marker, 'mouseover', function() {
-                infowindow.close();
-            });
-
-            // 마커의 드래그가 끝나면 현재 위치 갱신
-            kakao.maps.event.addListener(marker, 'dragend', function() {
-                currentPos = marker.getPosition();
-            });
-
-
-            // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-            map.setCenter(coords);
+            moveMap(result[0].y, result[0].x);
         }
     });
 }
@@ -139,8 +76,8 @@ function keywordSearch(){
             // 페이지 번호를 표출합니다
             displayPagination(pagination);
 
-            // 로그인이 되어 있는 경우 키워드를 저장합니다
-            saveKeyword(id,keyword);
+            // 로그인이 되어 있는 경우 키워드와 좌표를 저장합니다
+            saveData(id,keyword,currentPos);
 
         } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
 
@@ -319,20 +256,77 @@ function keywordSearch(){
     }
 }
 
-function saveKeyword(id,keyword){
+
+function saveData(id,keyword,position){
     // 로그인 정보가 없을 경우 종료
-    if(id == undefined)
+    if (id == undefined)
         return;
 
     $.ajax({
-        url:"keywordData",
+        url:"data",
         type:'POST',
         data: {
             "id" : id,
-            "keyword": keyword },
+            "keyword": keyword,
+            "position": position.toString() },
     }).done(function () {
         $('.last-keyword').html(keyword).click(function (){
             $('#keyword').val(keyword).focus();
         });
+    });
+}
+
+function loadLastPosition(position){
+    if(position==undefined)
+        return;
+
+    var splited = position.split(',');
+    var latitude = Number(splited[0].substr(1));
+    var longittude = Number(splited[1].substr(0,splited[1].length-1));
+
+    // 지도 이동
+    moveMap(latitude,longittude);
+}
+
+// 현재 위치 마커
+var marker;
+
+function moveMap(latitude,longittude){
+    // 위치 갱신
+    currentPos = new kakao.maps.LatLng(latitude,longittude);
+
+    // 지도 이동(기존 위치와 가깝다면 부드럽게 이동)
+    map.panTo(currentPos);
+
+    // 확대 수준 변경
+    map.setLevel(3);
+
+    // 기존에 마커가 있다면 위치이동
+    if(marker != undefined){
+        marker.setPosition(currentPos);
+    } else{
+        // 마커 생성
+        marker = new kakao.maps.Marker({
+            position: currentPos,
+            draggable: true,
+            map: map
+        });
+        marker.setMap(map);
+    }
+
+    var infowindow = new kakao.maps.InfoWindow({
+        content: '<div style="width:150px;text-align:center;padding:6px 0;">' +
+            '위치가 부정확하다면 드래그를 통해 정확한 위치로 옮겨주세요!</div>'
+    });
+    infowindow.open(map, marker);
+
+    // 마우스를 마커에 올릴 시 인포윈도우 삭제
+    kakao.maps.event.addListener(marker, 'mouseover', function() {
+        infowindow.close();
+    });
+
+    // 마커의 드래그가 끝나면 현재 위치 갱신
+    kakao.maps.event.addListener(marker, 'dragend', function() {
+        currentPos = marker.getPosition();
     });
 }

@@ -21,25 +21,30 @@ public class mainController {
     private final UserService userService;
 
     @GetMapping("/")
-    public String main(Model model){
+    public String main(Model model) {
         SessionUser user = (SessionUser) httpSession.getAttribute("user");
 
-        if(user != null) {
-            model.addAttribute("id",user.getId());
+        if (user != null) {
+            model.addAttribute("id", user.getId());
             model.addAttribute("userName", user.getName());
-            model.addAttribute("userEmail",user.getEmail());
-            if(user.getLast_keyword()!=null)
-                model.addAttribute("last_keyword",user.getLast_keyword());
+            model.addAttribute("userEmail", user.getEmail());
+            if (user.getLast_keyword() != null)
+                model.addAttribute("last_keyword", user.getLast_keyword());
+            if (user.getLast_position() != null)
+                model.addAttribute("last_position",user.getLast_position());
         }
         return "main";
     }
 
-    @PostMapping("keywordData")
-    public String getKeywordData(Model model, @RequestParam(value="id") Long id, @RequestParam(value="keyword") String keyword){
-        userService.saveKeyword(id,keyword);
+    @PostMapping("data")
+    public String getKeywordData(Model model, @RequestParam(value = "id") Long id, @RequestParam(value = "keyword") String keyword,
+                                 @RequestParam(value="position")String position) {
+        userService.saveKeyword(id, keyword);
+        userService.savePosition(id,position);
         SessionUser user = (SessionUser) httpSession.getAttribute("user");
 
-        model.addAttribute("last_keyword",user.getLast_keyword());
+        model.addAttribute("last_keyword", user.getLast_keyword());
+        model.addAttribute("last_position",user.getLast_position());
         return "main";
     }
 }

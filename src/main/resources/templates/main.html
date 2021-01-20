@@ -16,9 +16,12 @@
             안녕하세요! <span th:text="${userName}"></span> 님! <br>
             <input type="hidden" id="userId" th:value="${id}"/>
             <input th:if="${last_keyword != null}" type="hidden" id="last-keyword"  th:value="${last_keyword}"/>
+            <input th:if="${last_position != null}" type="hidden" id="last-position"  th:value="${last_position}"/>
             <script th:inline="javascript">
                 keyword = $('#last-keyword').val();
+                position = $('#last-position').val();
                 $(window).load(function(){
+                    loadLastPosition(position);
                     $('.last-keyword').html(keyword).click(function (){
                         $('#keyword').val(keyword).focus();
                     });

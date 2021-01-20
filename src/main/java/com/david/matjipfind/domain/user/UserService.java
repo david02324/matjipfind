@@ -19,4 +19,12 @@ public class UserService {
         httpSession.setAttribute("user",new SessionUser(user));
         return;
     }
+
+    public void savePosition(Long id,String position){
+        User user = userRepository.getOne(id);
+        user.setLast_position(position);
+        userRepository.save(user);
+        httpSession.setAttribute("user",new SessionUser(user));
+        return;
+    }
 }

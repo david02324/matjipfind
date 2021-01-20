@@ -22,7 +22,6 @@ public class User {
     private String email;
 
     private String last_position;
-
     public void setLast_position(String last_position) {
         this.last_position = last_position;
     }
