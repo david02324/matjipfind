@@ -21,6 +21,7 @@ dependencies {
 	annotationProcessor(group: 'org.projectlombok',name: 'lombok')
 	runtimeOnly('com.h2database:h2')
 	compile('org.springframework.boot:spring-boot-starter-oauth2-client')
+	compile 'mysql:mysql-connector-java'
 }
 
 test {

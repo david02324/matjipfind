@@ -1,5 +1,6 @@
 package com.david.matjipfind.controller;
 
+import com.david.matjipfind.config.auth.LoginUser;
 import com.david.matjipfind.config.auth.dto.SessionUser;
 import com.david.matjipfind.domain.user.User;
 import com.david.matjipfind.domain.user.UserRepository;
@@ -21,8 +22,7 @@ public class mainController {
     private final UserService userService;
 
     @GetMapping("/")
-    public String main(Model model) {
-        SessionUser user = (SessionUser) httpSession.getAttribute("user");
+    public String main(Model model, @LoginUser SessionUser user) {
 
         if (user != null) {
             model.addAttribute("id", user.getId());
@@ -37,11 +37,11 @@ public class mainController {
     }
 
     @PostMapping("data")
-    public String getKeywordData(Model model, @RequestParam(value = "id") Long id, @RequestParam(value = "keyword") String keyword,
+    public String getKeywordData(Model model, @LoginUser SessionUser user,
+                                 @RequestParam(value = "id") Long id, @RequestParam(value = "keyword") String keyword,
                                  @RequestParam(value="position")String position) {
         userService.saveKeyword(id, keyword);
         userService.savePosition(id,position);
-        SessionUser user = (SessionUser) httpSession.getAttribute("user");
 
         model.addAttribute("last_keyword", user.getLast_keyword());
         model.addAttribute("last_position",user.getLast_position());
