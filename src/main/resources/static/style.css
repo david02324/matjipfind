@@ -12,13 +12,31 @@ body{
 .header{
     background: orange;
     text-align: left;
-    font-size: 8em;
+    height: 8em;
 }
 .header #logo{
   float:left;
 }
-.header #logo img{
-    vertical-align: middle;
+#sidebar {
+  background: grey;
+  width: 300px;
+  height: 100%;
+  top: 0;
+  left: -300px;
+  position: fixed;
+}
+#sidebar > button {
+  background:#333;
+  position: absolute;
+  top: 8em;
+  left: 300px;
+  width: 52px;
+  height: 4em;
+  border: none;
+  color: white;
+}
+#google-login{
+    padding: 0;
 }
 .middle{
     display: flex;
@@ -32,8 +50,7 @@ body{
     margin-right: 1vw;
 }
 .login-area{
-    float: left;
-
+    margin-top: 10em;
     background-color: grey;
 }
 .middle-right{
@@ -43,9 +60,9 @@ body{
 }
 .footer{
     height: 15vh;
-    width: 100vw;
+    width: 100%;
     background: green;
-    position: absolute;
+    position: fixed;
     left: 0;
     bottom: 0;
 }

@@ -5,14 +5,43 @@
     <link rel="shortcut icon" type="image/png" th:href="@{/img/favicon.png}"/>
     <Title>맛집찾아</Title>
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script th:inline="javascript">
+  	$(function(){
+  		var duration = 300;
+
+  		var $side = $('#sidebar');
+  		var $sidebt = $side.find('button').on('click', function(){
+  			$side.toggleClass('open');
+
+  			if($side.hasClass('open')) {
+  				$side.stop(true).animate({left:'0px'}, duration);
+  				$('.footer').animate({left:'300px'},duration);
+                $('#logo').animate({marginLeft:'300px'},duration);
+  				$sidebt.find('span').text('X');
+  			}else{
+  				$side.stop(true).animate({left:'-300px'}, duration);
+                $('.footer').animate({left:'0px'},duration);
+                $('#logo').animate({marginLeft:'0px'},duration);
+  				$sidebt.find('span').text('MENU');
+  			};
+  		});
+  	});
+  </script>
 </head>
 <body>
 <div class="wrap">
     <!-- HEADER -->
     <div class="header">
-        <div id="logo"><img th:src="@{/img/logo.png}" /></div> 맛집찾아
+        <div id="logo">
+            <img th:src="@{/img/logo.png}"/>
+            <img th:src="@{img/title.png}" height="100px"/>
+        </div>
     </div>
-    <div class="login-area">
+    <aside id="sidebar">
+        <div class="login-area">
         <span th:if="${userName != null}">
             안녕하세요! <span th:text="${userName}"></span> 님! <br>
             <input type="hidden" id="userId" th:value="${id}"/>
@@ -30,11 +59,17 @@
             </script>
             <a href="/logout" class="btn btn-info active" role="button">로그아웃</a>
         </span>
-        <span th:if="${userName == null}">
-            <a href="/oauth2/authorization/google" class="btn btn-success active" role="button">구글로 로그인!</a><br>
-            <a href="/oauth2/authorization/naver" class="btn btn-success active" role="button">네이버로 로그인!</a>
+            <span th:if="${userName == null}">
+            <a class="btn btn-outline-dark" id="google-login" href="/oauth2/authorization/google" role="button" style="text-transform:none">
+            <img height="43px" th:src="@{/img/googlelogin.png}" />
+            </a>
+            <a class="btn btn-outline-dark" id="naver-login" href="/oauth2/authorization/naver" role="button" style="text-transform:none">
+            <img height="40px" th:src="@{/img/naverlogin.png}" />
+            </a>
         </span>
-    </div>
+        </div>
+			<button><span class="btn_t">MENU</span></button>
+		</aside>
     <!-- MIDDLE -->
     <div class="middle">
         <div class="middle-left" id="map"></div>
@@ -80,7 +115,5 @@
 </div>
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a7785e99dbe88494a267131d874684c8&libraries=services"></script>
 <script type="text/javascript" th:src="@{map.js?ver=1.1}"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 </body>
 </html>
