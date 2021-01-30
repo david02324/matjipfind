@@ -38,7 +38,7 @@
         <div id="logo">
             <a href="/">
             <img th:src="@{/img/logo.png}"/>
-            <img th:src="@{img/title.png}" height="100px"/>
+            <img th:src="@{img/title.png}"/>
             </a>
         </div>
     </div>
@@ -79,16 +79,19 @@
     <div class="middle">
         <div class="middle-left" id="map"></div>
         <div class="middle-right">
-            <div>
+            <img th:src="@{/img/mypo.png}"/> <br>
+            <div class="position-btn-box">
             <!-- 위치 정보 가져오는 버튼 -->
             <button type="button" class="btn btn-lg btn-primary"
-                    onclick="getCurrentPosBtn()">내 위치 가져오기</button>
+                    onclick="getCurrentPosBtn()">가져오기</button>
             <button type="button" class="btn btn-lg btn-primary"
-                    onclick="getCurrentPosByPickBtn()">내 위치 직접선택</button>
+                    onclick="getCurrentPosByPickBtn()">직접입력</button>
             </div>
             <input type="text" class="form-control" id="keyword" onkeypress="if(event.keyCode==13){keywordSearch();}"
                    placeholder="키워드(ex 국밥,불고기)">
-            <span class="last-keyword">최근키워드</span>
+            <span th:if="${userName == null}">로그인하세요!</span>
+            <span th:if="${userName != null}">최근검색어 : </span>
+            <span class="last-keyword"></span>
             <button type="button" class="btn btn-lg btn-primary" onclick="keywordSearch()">검색</button>
             <div class="radio">
                 <div>
@@ -115,7 +118,10 @@
     </div>
     <div style="clear:both"></div>
     <div class="footer">
-        <span>이곳은 하단 푸터 영역 입니다. 색깔은 초록</span>
+        <div class="footer-disc">
+        <span>만든이</span>
+        <a href="http://dawitblog.tistory.com/">Jangdawit</a>
+        </div>
     </div>
 </div>
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a7785e99dbe88494a267131d874684c8&libraries=services"></script>

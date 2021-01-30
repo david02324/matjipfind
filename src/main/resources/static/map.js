@@ -156,12 +156,17 @@ function keywordSearch(){
 
         var el = document.createElement('li'),
             itemStr = '<span class="markerbg marker_' + (index+1) + '"></span>' +
-                '<div class="info">' +
-                '  <a href="'+naverSearch(places.place_name)+'" target="_blank" title="클릭시 네이버 검색">' +
-                '<h5>' + places.place_name + '</h5></a>';
+                '<div class="info" style="background: white;" >' +
+                '<a href="'+naverSearch(places.place_name)+'" target="_blank" title="클릭시 네이버 검색" style="display: block; ' +
+                'color: black; text-decoration: none">' +
+                '<h5>' + places.place_name + '</h5>';
 
-        itemStr += '  <span class="tel">' + places.phone  + '</span>' +
-            '</div>';
+        if(places.phone != '') {
+            itemStr += '  <span class="tel">' + places.phone + '</span>';
+        } else{
+            itemStr += '  <span class="tel">클릭으로 전화번호를 확인해주세요</span> ';
+        }
+        itemStr += '</a></div>';
 
         el.innerHTML = itemStr;
         el.className = 'item';
