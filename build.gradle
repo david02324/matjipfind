@@ -38,6 +38,7 @@ dependencies {
 	runtimeOnly('com.h2database:h2')
 	compile('org.springframework.boot:spring-boot-starter-oauth2-client')
 	compile 'mysql:mysql-connector-java'
+	compile('org.mariadb.jdbc:mariadb-java-client')
 }
 
 test {
