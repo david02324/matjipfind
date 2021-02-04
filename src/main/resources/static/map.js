@@ -49,6 +49,7 @@ function keywordSearch(){
     var distance = $("input[name='distance']:checked").val();
     var markers = [];
 
+
     // 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성합니다
     var infowindow = new kakao.maps.InfoWindow({zIndex:1});
 
@@ -156,9 +157,9 @@ function keywordSearch(){
 
         var el = document.createElement('li'),
             itemStr = '<span class="markerbg marker_' + (index+1) + '"></span>' +
-                '<div class="info" style="background: white;" >' +
+                '<div class="info" style="background: yellowgreen;  border-radius: 8px;" >' +
                 '<a href="'+naverSearch(places.place_name)+'" target="_blank" title="클릭시 네이버 검색" style="display: block; ' +
-                'color: black; text-decoration: none">' +
+                'color: black; text-decoration: none;">' +
                 '<h5>' + places.place_name + '</h5>';
 
         if(places.phone != '') {

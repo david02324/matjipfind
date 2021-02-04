@@ -75,7 +75,14 @@ span,div{
     background: darkorange;
     border-radius: 1em;
     min-height: 490px;
-    min-width: 203px;
+    min-width: 220px;
+    overflow: auto;
+}
+.my-position{
+    float: left;
+    margin-left: 20px;
+    text-align: left;
+    font-size: 2em;
 }
 .footer{
     height: 8vh;
