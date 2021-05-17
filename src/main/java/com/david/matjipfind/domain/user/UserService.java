@@ -12,19 +12,19 @@ public class UserService {
     private final UserRepository userRepository;
     private final HttpSession httpSession;
 
-    public void saveKeyword(Long id,String keyword) {
+    public void saveKeyword(Long id, String keyword) {
         User user = userRepository.getOne(id);
         user.setLast_keyword(keyword);
         userRepository.save(user);
-        httpSession.setAttribute("user",new SessionUser(user));
+        httpSession.setAttribute("user", new SessionUser(user));
         return;
     }
 
-    public void savePosition(Long id,String position){
+    public void savePosition(Long id, String position) {
         User user = userRepository.getOne(id);
         user.setLast_position(position);
         userRepository.save(user);
-        httpSession.setAttribute("user",new SessionUser(user));
+        httpSession.setAttribute("user", new SessionUser(user));
         return;
     }
 }
