@@ -12,12 +12,10 @@ const Header: React.VoidFunctionComponent = () => {
   };
 
   return (
-    <>
-      <div style={style}>
-        <Logo />
-        <LoginBox />
-      </div>
-    </>
+    <header style={style}>
+      <Logo />
+      <LoginBox />
+    </header>
   );
 };
 
