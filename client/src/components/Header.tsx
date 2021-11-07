@@ -1,9 +1,8 @@
 import * as React from "react";
+import LoginBox from "./LoginBox";
 import Logo from "./Logo";
 
-interface IHeaderProps {}
-
-const Header: React.FunctionComponent<IHeaderProps> = ({}: IHeaderProps) => {
+const Header: React.VoidFunctionComponent = () => {
   const style: React.CSSProperties = {
     width: "100%",
     height: "70px",
@@ -16,6 +15,7 @@ const Header: React.FunctionComponent<IHeaderProps> = ({}: IHeaderProps) => {
     <>
       <div style={style}>
         <Logo />
+        <LoginBox />
       </div>
     </>
   );
