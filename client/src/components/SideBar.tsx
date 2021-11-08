@@ -1,4 +1,5 @@
 import * as React from "react";
+import Button from "./Button";
 import InputBox from "./InputBox";
 
 const SideBar: React.VoidFunctionComponent = () => {
@@ -15,6 +16,8 @@ const SideBar: React.VoidFunctionComponent = () => {
 
   return (
     <div style={style}>
+      <Button width={220} />
+      혹은
       <InputBox width={220} type={1} placeHolder="위치를 직접 입력하기" />
     </div>
   );

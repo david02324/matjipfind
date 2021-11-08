@@ -37,6 +37,7 @@ const InputBox: React.FunctionComponent<IInputBoxProps> = ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    margin: "10px 0",
   };
 
   const imgBtnStyle: React.CSSProperties = {
