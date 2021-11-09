@@ -1,4 +1,5 @@
 import * as React from "react";
+import { MapProvider } from "../store/mapStore";
 import MapBox from "./MapBox";
 import SideBar from "./SideBar";
 
@@ -11,10 +12,12 @@ const MainContainer: React.VoidFunctionComponent = () => {
     border: "1px solid gray",
   };
   return (
-    <div style={style}>
-      <MapBox />
-      <SideBar />
-    </div>
+    <MapProvider>
+      <div style={style}>
+        <MapBox />
+        <SideBar />
+      </div>
+    </MapProvider>
   );
 };
 
