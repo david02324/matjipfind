@@ -1,4 +1,5 @@
 import * as React from "react";
+import { getMyPos } from "../utils/mapUtils";
 import Button from "./Button";
 import InputBox from "./InputBox";
 
@@ -16,11 +17,15 @@ const SideBar: React.VoidFunctionComponent = () => {
 
   return (
     <div style={style}>
-      <Button width={220} />
+      <Button width={220} onClick={getMyPosBtnClickHandler} />
       혹은
       <InputBox width={220} type={1} placeHolder="위치를 직접 입력하기" />
     </div>
   );
+};
+
+const getMyPosBtnClickHandler = () => {
+  getMyPos();
 };
 
 export default SideBar;

@@ -2,9 +2,13 @@ import * as React from "react";
 
 interface IButtonProps {
   width: number;
+  onClick?: VoidFunction;
 }
 
-const Button: React.FunctionComponent<IButtonProps> = ({ width }) => {
+const Button: React.FunctionComponent<IButtonProps> = ({
+  width,
+  onClick = () => {},
+}) => {
   const style: React.CSSProperties = {
     width: width,
     height: "50px",
@@ -15,7 +19,11 @@ const Button: React.FunctionComponent<IButtonProps> = ({ width }) => {
     cursor: "pointer",
     fontSize: "1rem",
   };
-  return <button style={style}>내 위치 가져오기</button>;
+  return (
+    <button style={style} onClick={onClick}>
+      내 위치 가져오기
+    </button>
+  );
 };
 
 export default Button;
