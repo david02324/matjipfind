@@ -8,6 +8,10 @@ import Container from "./components/Container";
 declare global {
   interface Window {
     kakao: any;
+    kakaoMap: {
+      map: any;
+      currentPos: any;
+    };
   }
 }
 
