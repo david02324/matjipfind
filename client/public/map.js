@@ -1,23 +1,6 @@
 // 현재 위치
 var currentPos;
 
-function locationLoadSuccess(pos) {
-  // 지도 이동
-  moveMap(pos.coords.latitude, pos.coords.longitude);
-}
-
-function locationLoadError() {
-  alert("위치 정보를 가져오는데 실패했습니다 :( 직접선택 기능을 이용해주세요.");
-}
-
-// 위치 가져오기 버튼 클릭시
-function getCurrentPosBtn() {
-  navigator.geolocation.getCurrentPosition(
-    locationLoadSuccess,
-    locationLoadError
-  );
-}
-
 function getCurrentPosByPickBtn() {
   var userInput = prompt("대략적인 위치를 입력해주세요!(서울시 강남구 삼성동)");
 
@@ -283,48 +266,4 @@ function loadLastPosition(position) {
 
   // 지도 이동
   moveMap(latitude, longittude);
-}
-
-// 현재 위치 마커
-var marker;
-
-function moveMap(latitude, longittude) {
-  // 위치 갱신
-  currentPos = new kakao.maps.LatLng(latitude, longittude);
-
-  // 지도 이동(기존 위치와 가깝다면 부드럽게 이동)
-  map.panTo(currentPos);
-
-  // 확대 수준 변경
-  map.setLevel(3);
-
-  // 기존에 마커가 있다면 위치이동
-  if (marker != undefined) {
-    marker.setPosition(currentPos);
-  } else {
-    // 마커 생성
-    marker = new kakao.maps.Marker({
-      position: currentPos,
-      draggable: true,
-      map: map,
-    });
-    marker.setMap(map);
-  }
-
-  var infowindow = new kakao.maps.InfoWindow({
-    content:
-      '<div style="width:150px;text-align:center;padding:6px 0;">' +
-      "위치가 부정확하다면 드래그를 통해 정확한 위치로 옮겨주세요!</div>",
-  });
-  infowindow.open(map, marker);
-
-  // 마우스를 마커에 올릴 시 인포윈도우 삭제
-  kakao.maps.event.addListener(marker, "mouseover", function () {
-    infowindow.close();
-  });
-
-  // 마커의 드래그가 끝나면 현재 위치 갱신
-  kakao.maps.event.addListener(marker, "dragend", function () {
-    currentPos = marker.getPosition();
-  });
 }
