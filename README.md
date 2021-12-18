@@ -2,7 +2,6 @@
 
 ## 🤔What is this?🤔
 
-
 [이동](https://matjipfind.tk)
 
 #### 첫 웹 프로젝트. 사용자의 위치정보를 가져오거나 직접입력하여 마커를 생성한 뒤, 해당 마커로부터 일정 거리 이내의 검색한 음식점을 찾아줌
@@ -26,27 +25,33 @@
 - [AWS EC2에 무료 도메인 등록하기](https://dawitblog.tistory.com/92?category=912793)
 - [구글,네이버 로그인 API 에 주소 등록, SSL인증서 등록](https://dawitblog.tistory.com/95?category=912793)
 
-
 ## 📸 Screenshot 📸
 
 ![image](https://user-images.githubusercontent.com/74395374/107799271-919b4880-6da0-11eb-916f-0f938296bb6c.png)
+
 ###### Springboot,Ajax,OAuth,AWS,Kakao map API
 
 ---
-# ⚡matjipfind 2.0⚡
-이전에 내가 싼 똥💩 을 개선하고 더욱 발전시키기 워함
 
-## 필수사항
+# ⚡matjipfind 2.0⚡ (WIP)
+
+프로젝트 전체적인 개선 및 리팩토링, 기술적 도전 및 학습
+
+## Todo
 
 - 뷰 페이지 개선
-    - react.js + typescript 적용
+
+  - react.js + typescript 적용
+  - webpack5 번들링 및 babel 적용
+
 - 코드 리팩토링
-    - 구글 로그인은 직접 작성한 코드로 개선
-    - 폴더 구조 개선
+
+  - 구글 로그인은 직접 작성한 코드로 개선
+  - 폴더 구조 개선
+
+- 백엔드 프레임워크 Spring -> Nest
+- DB 스키마 다시 설계
 - 테스트 코드 작성
 - 배포 자동화
-
-## 권장사항
-
-- 스트레스 테스트 및 슬로우 쿼리(?) 개선
+- 스트레스 테스트
 - 모니터링 및 알림 툴
