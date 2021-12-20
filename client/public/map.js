@@ -1,21 +1,6 @@
 // 현재 위치
 var currentPos;
 
-function getCurrentPosByPickBtn() {
-  var userInput = prompt("대략적인 위치를 입력해주세요!(서울시 강남구 삼성동)");
-
-  // 주소 - 좌표 변환 객체 생성
-  var geocoder = new kakao.maps.services.Geocoder();
-
-  // 주소로 좌표를 검색합니다
-  geocoder.addressSearch(userInput, function (result, status) {
-    // 정상적으로 검색이 완료됐으면
-    if (status === kakao.maps.services.Status.OK) {
-      moveMap(result[0].y, result[0].x);
-    }
-  });
-}
-
 // 검색 버튼 클릭시
 function keywordSearch() {
   var keyword = $("#keyword").val();

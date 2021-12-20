@@ -12,12 +12,14 @@ interface IInputBoxProps {
   width: number;
   type: InputBoxType;
   placeHolder?: string;
+  imgBtnOnClick: (userInput: string) => void;
 }
 
 const InputBox: React.FunctionComponent<IInputBoxProps> = ({
   type,
   width,
   placeHolder,
+  imgBtnOnClick,
 }) => {
   let imageSrc = "";
   switch (type) {
@@ -28,6 +30,8 @@ const InputBox: React.FunctionComponent<IInputBoxProps> = ({
       imageSrc = searchBtn;
       break;
   }
+
+  const [value, setValue] = React.useState("");
 
   const style: React.CSSProperties = {
     width: width,
@@ -51,13 +55,30 @@ const InputBox: React.FunctionComponent<IInputBoxProps> = ({
     fontSize: "1rem",
   };
 
+  const imgBtnOnClickHandler = () => {
+    imgBtnOnClick(value);
+  };
+
+  const inputOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+  };
+
   return (
     <div style={style}>
-      <input style={inputStyle} placeholder={placeHolder}></input>
-      {type === 0 ? (
+      <input
+        style={inputStyle}
+        placeholder={placeHolder}
+        onChange={inputOnChange}
+      ></input>
+      {type === InputBoxType.NONE ? (
         ""
       ) : (
-        <img src={imageSrc} alt="검색 버튼" style={imgBtnStyle}></img>
+        <img
+          src={imageSrc}
+          alt="검색 버튼"
+          style={imgBtnStyle}
+          onClick={imgBtnOnClickHandler}
+        ></img>
       )}
     </div>
   );

@@ -79,3 +79,18 @@ function moveMap(latitude: number, longitude: number) {
     window.kakaoMap.currentPos = marker.getPosition();
   });
 }
+
+export function getCurrentPosByUserInput(userInput: string) {
+  // 주소 - 좌표 변환 객체 생성
+  var geocoder = new kakao.maps.services.Geocoder();
+
+  // 주소로 좌표를 검색합니다
+  geocoder.addressSearch(userInput, (result: any, status: any) => {
+    // 정상적으로 검색이 완료됐으면
+    if (status === kakao.maps.services.Status.OK) {
+      moveMap(result[0].y, result[0].x);
+    } else {
+      alert("알 수 없는 지역입니다!");
+    }
+  });
+}
