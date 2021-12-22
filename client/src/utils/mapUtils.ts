@@ -11,7 +11,7 @@ const kakao = window.kakao;
 let myMap: any = null;
 let marker: any = null;
 
-export const initalizeMap = (container: HTMLElement | null) => {
+export function initalizeMap(container: HTMLElement | null) {
   const { kakao } = window;
   const initPos = new kakao.maps.LatLng(37.56646, 126.98121);
   const mapOption = {
@@ -27,20 +27,18 @@ export const initalizeMap = (container: HTMLElement | null) => {
     currentPos: initPos,
   };
   myMap = window.kakaoMap.map;
-};
+}
 
-export const getMyPos = () =>
-  navigator.geolocation.getCurrentPosition(onGetMyPosSuccess, onGetMyPosFail);
+export function getMyPos() {
+  return new Promise<void>((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition((pos: GeolocationPosition) => {
+      const { latitude, longitude } = pos.coords;
+      moveMap(latitude, longitude);
 
-const onGetMyPosSuccess = (pos: GeolocationPosition) => {
-  const { latitude, longitude } = pos.coords;
-  moveMap(latitude, longitude);
-};
-
-const onGetMyPosFail = () =>
-  alert(
-    "위치 조회에 실패했습니다! 잠시 후 다시 시도하거나 위치를 직접입력해주세요!"
-  );
+      resolve();
+    }, reject);
+  });
+}
 
 function moveMap(latitude: number, longitude: number) {
   // 위치 갱신
@@ -84,13 +82,17 @@ export function getCurrentPosByUserInput(userInput: string) {
   // 주소 - 좌표 변환 객체 생성
   var geocoder = new kakao.maps.services.Geocoder();
 
-  // 주소로 좌표를 검색합니다
-  geocoder.addressSearch(userInput, (result: any, status: any) => {
-    // 정상적으로 검색이 완료됐으면
-    if (status === kakao.maps.services.Status.OK) {
-      moveMap(result[0].y, result[0].x);
-    } else {
-      alert("알 수 없는 지역입니다!");
-    }
+  return new Promise<void>((resolve, reject) => {
+    // 주소로 좌표를 검색합니다
+    geocoder.addressSearch(userInput, (result: any, status: any) => {
+      // 정상적으로 검색이 완료됐으면
+      if (status === kakao.maps.services.Status.OK) {
+        moveMap(result[0].y, result[0].x);
+
+        resolve();
+      } else {
+        reject();
+      }
+    });
   });
 }
