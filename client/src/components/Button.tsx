@@ -2,11 +2,13 @@ import * as React from "react";
 
 interface IButtonProps {
   width: number;
+  text?: string;
   onClick?: VoidFunction;
 }
 
 const Button: React.FunctionComponent<IButtonProps> = ({
   width,
+  text,
   onClick = () => {},
 }) => {
   const style: React.CSSProperties = {
@@ -21,7 +23,7 @@ const Button: React.FunctionComponent<IButtonProps> = ({
   };
   return (
     <button style={style} onClick={onClick}>
-      내 위치 가져오기
+      {text ?? ""}
     </button>
   );
 };
