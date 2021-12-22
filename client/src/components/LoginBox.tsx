@@ -23,7 +23,6 @@ const LoginBox: React.VoidFunctionComponent = () => {
 
   return (
     <div style={style}>
-      <span style={spanStyle}>Login with...</span>
       <img src={naverLoginBtn} style={btnStyle} alt="네이버 로그인 버튼"></img>
       <img src={googleLoginBtn} style={btnStyle} alt="구글 로그인 버튼"></img>
       <img src={githubLoginBtn} style={btnStyle} alt="깃허브 로그인 버튼"></img>

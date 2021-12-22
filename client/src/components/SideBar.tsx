@@ -1,40 +1,49 @@
 import * as React from "react";
-import { getCurrentPosByUserInput, getMyPos } from "../utils/mapUtils";
-import Button from "./Button";
-import InputBox from "./InputBox";
+import FoodSearch from "./FoodSearch";
+import PosSearch from "./PosSearch";
+import UpperBar from "./upperBar";
+
+export enum STEP {
+  POSITION,
+  FOOD,
+  RESULT,
+}
 
 const SideBar: React.VoidFunctionComponent = () => {
+  const [step, setStep] = React.useState<STEP>(STEP.POSITION);
+
   const style: React.CSSProperties = {
     borderRadius: "0 10px 10px 0",
     borderLeft: "2px solid gray",
     width: "280px",
     height: "720px",
     display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
     alignItems: "center",
+    flexDirection: "column",
   };
 
-  return (
-    <div style={style}>
-      <Button width={220} onClick={getMyPosBtnClickHandler} />
-      혹은
-      <InputBox
-        width={220}
-        type={1}
-        placeHolder="위치를 직접 입력하기"
-        imgBtnOnClick={getMyPosByUserInputHandler}
-      />
-    </div>
-  );
-};
-
-const getMyPosBtnClickHandler = () => {
-  getMyPos();
-};
-
-const getMyPosByUserInputHandler = (userInput: string) => {
-  getCurrentPosByUserInput(userInput);
+  switch (step) {
+    case STEP.POSITION:
+      return (
+        <div style={style}>
+          <PosSearch setStep={setStep} />
+        </div>
+      );
+    case STEP.FOOD:
+      return (
+        <div style={style}>
+          <UpperBar
+            text="<< 위치선택"
+            setStep={() => {
+              setStep(STEP.POSITION);
+            }}
+          />
+          <FoodSearch setStep={setStep} />
+        </div>
+      );
+    case STEP.RESULT:
+      return <div style={style}></div>;
+  }
 };
 
 export default SideBar;
