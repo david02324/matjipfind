@@ -4,15 +4,23 @@ import {
   ToastsContainerPosition,
   ToastsStore,
 } from "react-toasts";
+import { keywordSearch } from "../utils/mapUtils";
 import Button from "./Button";
 import InputBox from "./InputBox";
-import { STEP } from "./SideBar";
+import { ResultSet, STEP } from "./SideBar";
+import Slider from "./Silder";
 
 export interface IFoodSearchProps {
   setStep: (step: STEP) => void;
+  setResultsSet: (resultSet: ResultSet) => void;
 }
 
-export default function FoodSearch({ setStep }: IFoodSearchProps) {
+export default function FoodSearch({
+  setStep,
+  setResultsSet,
+}: IFoodSearchProps) {
+  const [rangeValue, setRangeValue] = React.useState(50);
+
   const style: React.CSSProperties = {
     display: "flex",
     flexDirection: "column",
@@ -23,13 +31,25 @@ export default function FoodSearch({ setStep }: IFoodSearchProps) {
     transform: "translateY(-50%)",
   };
 
+  const keywordSearchClickHanlder = (userInput: string) => {
+    keywordSearch(userInput, rangeValue, (errMsg, results, pagination) => {
+      if (results) {
+        setResultsSet({ results, pagination });
+        setStep(STEP.RESULT);
+      } else if (errMsg) {
+        ToastsStore.error(errMsg);
+      }
+    });
+  };
+
   return (
     <div style={style}>
+      <Slider setRangeValue={setRangeValue} />
       <InputBox
         width={220}
         type={2}
         placeHolder="먹을 음식"
-        imgBtnOnClick={() => {}}
+        imgBtnOnClick={keywordSearchClickHanlder}
       />
       혹은
       <Button width={220} text="아무거나!" onClick={() => {}} />

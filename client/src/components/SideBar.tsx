@@ -1,6 +1,8 @@
 import * as React from "react";
+import { Pagination, Result } from "../utils/mapUtils";
 import FoodSearch from "./FoodSearch";
 import PosSearch from "./PosSearch";
+import SearchResults from "./SearchResults";
 import UpperBar from "./upperBar";
 
 export enum STEP {
@@ -9,10 +11,17 @@ export enum STEP {
   RESULT,
 }
 
+export interface ResultSet {
+  results: Result[];
+  pagination: Pagination;
+}
+
 const SideBar: React.VoidFunctionComponent = () => {
   const [step, setStep] = React.useState<STEP>(STEP.POSITION);
+  const [resultSet, setResultSet] = React.useState<ResultSet | null>(null);
 
   const style: React.CSSProperties = {
+    position: "relative",
     borderRadius: "0 10px 10px 0",
     borderLeft: "2px solid gray",
     width: "280px",
@@ -38,11 +47,27 @@ const SideBar: React.VoidFunctionComponent = () => {
               setStep(STEP.POSITION);
             }}
           />
-          <FoodSearch setStep={setStep} />
+          <FoodSearch setStep={setStep} setResultsSet={setResultSet} />
         </div>
       );
     case STEP.RESULT:
-      return <div style={style}></div>;
+      return (
+        <div style={style}>
+          <UpperBar
+            text="<< 위치선택"
+            setStep={() => {
+              setStep(STEP.POSITION);
+            }}
+          />
+          <UpperBar
+            text="<< 음식선택"
+            setStep={() => {
+              setStep(STEP.FOOD);
+            }}
+          />
+          <SearchResults resultSet={resultSet!} />
+        </div>
+      );
   }
 };
 

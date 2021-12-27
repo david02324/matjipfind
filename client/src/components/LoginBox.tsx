@@ -10,11 +10,6 @@ const LoginBox: React.VoidFunctionComponent = () => {
     position: "absolute",
     right: "20px",
   };
-  const spanStyle: React.CSSProperties = {
-    fontSize: "30px",
-    color: "white",
-    marginRight: "20px",
-  };
   const btnStyle: React.CSSProperties = {
     marginRight: "10px",
     width: "50px",
