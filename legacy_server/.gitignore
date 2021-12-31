@@ -1,0 +1,17 @@
+HELP.md
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+.idea
+
+### VS Code ###
+.vscode/
+
+### oauth ###
+application-oauth.properties
+
+# misc
+.DS_Store
+

@@ -1,27 +1,13 @@
-HELP.md
-.gradle
-build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
-.idea
-
-### VS Code ###
-.vscode/
-
-### oauth ###
-application-oauth.properties
-
+## Client
 # dependencies
 client/node_modules
 
 # production
 client/build
 
-# misc
-.DS_Store
-
 client/npm-debug.log*
 client/yarn-debug.log*
 client/yarn-error.log*
 client/.env
+
+## Server
