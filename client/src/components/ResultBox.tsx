@@ -20,7 +20,7 @@ export default function ResultBox({ result }: IResultBoxProps) {
   };
 
   return (
-    <div style={style}>
+    <div style={style} id={result.id}>
       <span>{result.place_name}</span>
       <span>{result.phone}</span>
     </div>

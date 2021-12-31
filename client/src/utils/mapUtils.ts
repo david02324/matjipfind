@@ -1,3 +1,7 @@
+// TODO
+// 맵 객체 클래스-인스턴스화
+// 타입 구체화 및 any 제거
+
 declare global {
   interface Window {
     kakao: any;
@@ -10,6 +14,9 @@ declare global {
 const kakao = window.kakao;
 let myMap: any = null;
 let myPosMarker: any = null;
+let markers: any = [];
+// 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성합니다
+const infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
 
 export function initalizeMap(container: HTMLElement | null) {
   const { kakao } = window;
@@ -104,6 +111,8 @@ export interface Result {
   category_name: string;
   place_name: string;
   phone: string;
+  x: string;
+  y: string;
 }
 
 export interface Pagination {
@@ -121,11 +130,6 @@ export function keywordSearch(
   distance: number,
   callback: (errMsg?: string, results?: Result[], pagination?: any) => void
 ): void {
-  const markers: any = [];
-
-  // 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성합니다
-  const infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
-
   // 장소 검색 객체를 생성합니다
   const ps = new kakao.maps.services.Places(myMap);
 
@@ -147,9 +151,11 @@ export function keywordSearch(
   ) {
     switch (status) {
       case kakao.maps.services.Status.OK:
-        // 정상적으로 검색이 완료됐으면
-        // 검색 목록과 마커를 표출합니다
+        // 결과 출력
         callback(undefined, results, pagination);
+
+        // 마커 표출
+        updateMarkers(results);
         break;
 
       // 로그인이 되어 있는 경우 키워드와 좌표를 저장합니다
@@ -164,15 +170,96 @@ export function keywordSearch(
   }
 }
 
-function naverSearch(placeName: string) {
-  // 검색어를 띄어쓰기 기준으로 분할
-  var nameArr = placeName.split(" ");
-  // 띄어쓰기 사이에 +넣어서 join
-  var joinedArr = nameArr.join("+");
+function getNaverSearchUrl(placeName: string) {
+  const parsedString = placeName.replace(" ", "+");
 
-  // 네이버 검색
-  return (
-    "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=" +
-    joinedArr
+  // 네이버 검색 url
+  return `https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=${parsedString}`;
+}
+
+// 마커 생성
+function updateMarkers(places: Result[]) {
+  const bounds = new kakao.maps.LatLngBounds();
+
+  // 지도에 표시되고 있는 기존 마커를 제거합니다
+  removeMarkers();
+
+  for (const [index, place] of places.entries()) {
+    // 마커를 생성하고 지도에 표시합니다
+    const placePosition = new kakao.maps.LatLng(place.y, place.x);
+    const marker = addMarker(placePosition, index);
+    const title = place.place_name;
+
+    // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+    // LatLngBounds 객체에 좌표를 추가합니다
+    bounds.extend(placePosition);
+
+    const openInfowindow = () => {
+      displayInfowindow(marker, title);
+    };
+
+    const closeInfowindow = () => {
+      infowindow.close();
+      return false;
+    };
+
+    // 마커와 검색결과 항목에 mouseover 했을때
+    // 해당 장소에 인포윈도우에 장소명을 표시합니다
+    // mouseout 했을 때는 인포윈도우를 닫습니다
+    kakao.maps.event.addListener(marker, "mouseover", openInfowindow);
+    kakao.maps.event.addListener(marker, "mouseout", closeInfowindow);
+
+    // DOM 요소에 이벤트 갱신
+    document.getElementById(place.id)!.onmouseover = openInfowindow;
+    document.getElementById(place.id)!.onmouseout = closeInfowindow;
+    document.getElementById(place.id)!.onclick = () => {
+      window.open(getNaverSearchUrl(place.place_name));
+    };
+  }
+
+  // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
+  myMap.setBounds(bounds);
+}
+
+// 지도 위에 표시되고 있는 마커를 모두 제거합니다
+function removeMarkers() {
+  for (const marker of markers) {
+    marker.setMap(null);
+  }
+  markers = [];
+}
+
+// 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
+function addMarker(position: any, idx: number) {
+  const imageSrc =
+    "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png"; // 마커 스프라이트 이미지 URL
+  const imageSize = new kakao.maps.Size(36, 37); // 마커 이미지의 크기
+  const imgOptions = {
+    spriteSize: new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
+    spriteOrigin: new kakao.maps.Point(0, idx * 46 + 10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
+    offset: new kakao.maps.Point(13, 37), // 마커 좌표에 일치시킬 이미지 내에서의 좌표
+  };
+  const markerImage = new kakao.maps.MarkerImage(
+    imageSrc,
+    imageSize,
+    imgOptions
   );
+  const marker = new kakao.maps.Marker({
+    position: position, // 마커의 위치
+    image: markerImage,
+  });
+
+  marker.setMap(myMap); // 지도 위에 마커를 표출합니다
+  markers.push(marker); // 배열에 생성된 마커를 추가합니다
+
+  return marker;
+}
+
+// 검색결과 목록 또는 마커를 클릭했을 때 호출되는 함수입니다
+// 인포윈도우에 장소명을 표시합니다
+function displayInfowindow(marker: any, title: string) {
+  const html = `<div style="padding:5px;z-index:1;">${title}</div>`;
+
+  infowindow.setContent(html);
+  infowindow.open(myMap, marker);
 }
