@@ -6,9 +6,6 @@ build/
 !**/src/test/**/build/
 .idea
 
-### VS Code ###
-.vscode/
-
 ### oauth ###
 application-oauth.properties
 
