@@ -16,11 +16,25 @@ const LoginBox: React.VoidFunctionComponent = () => {
     height: "50px",
   };
 
+  const onGithubLoginBtnClick = () => {
+    const clientId = process.env.REACT_APP_GITHUB_CLIENT_ID;
+    const redirectUrl = `${process.env.REACT_APP_API_URL}user/login/github/callback`;
+
+    const url = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUrl}`;
+
+    window.open(url);
+  };
+
   return (
     <div style={style}>
       <img src={naverLoginBtn} style={btnStyle} alt="네이버 로그인 버튼"></img>
       <img src={googleLoginBtn} style={btnStyle} alt="구글 로그인 버튼"></img>
-      <img src={githubLoginBtn} style={btnStyle} alt="깃허브 로그인 버튼"></img>
+      <img
+        src={githubLoginBtn}
+        style={btnStyle}
+        alt="깃허브 로그인 버튼"
+        onClick={onGithubLoginBtnClick}
+      ></img>
     </div>
   );
 };
