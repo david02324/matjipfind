@@ -39,10 +39,12 @@
 
 ## Todo
 
-- 뷰 페이지 개선
+![image](https://user-images.githubusercontent.com/74395374/149230576-ca1ff936-0a22-4104-b8f3-1752abd48570.png)
 
-  - react.js + typescript 적용
-  - webpack5 번들링 및 babel 적용
+- 뷰 페이지 개선 ✅
+
+  - react.js + typescript 적용 ✅
+  - webpack5 번들링 및 babel 적용 ✅
 
 - 코드 리팩토링
 
